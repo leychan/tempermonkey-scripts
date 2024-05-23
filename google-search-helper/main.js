@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         google-search-helper
 // @namespace    github.com/leychan
-// @version      0.6
+// @version      0.7
 // @description  在新标签页打开google搜索结果
 // @author       leychan
 // @match        https://www.google.com.hk/search*
