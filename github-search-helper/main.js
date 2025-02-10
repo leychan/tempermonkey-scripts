@@ -16,28 +16,35 @@
 (function() {
     'use strict';
 
-    const observer = new MutationObserver((mutationsList, observer) => {
-        const element = document.querySelector('[data-testid="results-list"]');
-        if (element) {
-            let allSearchResultATag = element.getElementsByTagName('a')
-            for (let i = 0 ;i < allSearchResultATag.length; i++) {
-                allSearchResultATag[i].setAttribute('target', '_blank')
-                console.log(allSearchResultATag[i])
-            }
-            observer.disconnect(); // 停止观察
+    // 修改所有 <a> 标签的 target 属性
+    function setTargetBlank() {
+        const allATags = document.getElementsByTagName('a');
+        for (let i = 0; i < allATags.length; i++) {
+            allATags[i].setAttribute('target', '_blank');
         }
+    }
+
+    // 初始化 MutationObserver
+    const observer = new MutationObserver((mutationsList, observer) => {
+        // 检查是否有新的节点被添加到 DOM 中
+        mutationsList.forEach(mutation => {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                // 如果新增的节点中包含 <a> 标签，则修改其 target 属性
+                mutation.addedNodes.forEach(node => {
+                    if (node.nodeType === 1 && node.tagName === 'A') { // 检查是否是元素节点且是 <a> 标签
+                        node.setAttribute('target', '_blank');
+                    } else if (node.nodeType === 1 && node.querySelectorAll) { // 检查是否是元素节点且包含子节点
+                        const aTags = node.querySelectorAll('a');
+                        aTags.forEach(aTag => aTag.setAttribute('target', '_blank'));
+                    }
+                });
+            }
+        });
     });
 
+    // 启动 MutationObserver
     observer.observe(document.body, { childList: true, subtree: true });
 
-
-    let allExploreResultATag = document.getElementsByTagName('a')
-    for (let i = 0 ;i < allExploreResultATag.length; i++) {
-        allExploreResultATag[i].setAttribute('target', '_blank')
-    }
-
-    let allTrendingResultATag = document.getElementsByTagName('a')
-    for (let i = 0 ;i < allTrendingResultATag.length; i++) {
-        allTrendingResultATag[i].setAttribute('target', '_blank')
-    }
-  })();
+    // 初始修改页面中所有的 <a> 标签
+    setTargetBlank();
+})();
