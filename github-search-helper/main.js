@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         github-search-helper
 // @namespace    github.com/leychan
-// @version      0.2
+// @version      0.3
 // @description  在新标签页打开github搜索,explore和trending结果
 // @author       leychan
 // @match        https://github.com/trending
